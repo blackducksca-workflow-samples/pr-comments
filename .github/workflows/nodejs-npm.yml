@@ -1,17 +1,15 @@
-name: Node.js CI
+name: Black Duck PR Comments
                                                                                                                                                                                                                                           
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
                                                                                                                                                                                                                                           
 jobs:
-  build:
+  blackduck-pr-scan:
     runs-on: ubuntu-latest
                                                                                                                                                                                                                                           
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
                                                                                                                                                                                                                                           
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -23,7 +21,12 @@ jobs:
         cd nodejs-npm
         npm install
                                                                                                                                                                                                                                           
-    - name: Run tests
-      run: |
-        cd nodejs-npm
-        npm test
+    - name: Black Duck PR Scan
+      uses: blackducksoftware/blackduck-security-scan-action@v2
+      with:
+        blackducksca_url: ${{ secrets.BLACKDUCK_URL }}
+        blackducksca_token: ${{ secrets.BLACKDUCK_TOKEN }}
+        blackducksca_prcomment_enabled: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
