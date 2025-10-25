@@ -38,5 +38,6 @@ jobs:
         blackducksca_token: ${{ secrets.BLACKDUCK_TOKEN }}
         blackducksca_prcomment_enabled: true
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        detect_args: "--detect.source.path=${{ github.workspace }}/nodejs-npm"
       env:
         DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
