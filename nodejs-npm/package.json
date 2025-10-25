@@ -22,7 +22,8 @@
     "swig": "^1.4.2",
     "underscore": "^1.8.3",
     "jquery": "^2.2.4",
-    "lodash": "4.17.4"
+    "lodash": "4.17.4",
+    "mongoose": "4.13.6"
   },
   "comments": {
     "//": "a9 insecure components"
