@@ -1,27 +1,37 @@
-name: Black Duck PR Comments
+name: Black Duck Sca scan with PR Comments
                                                                                                                                                                                                                                           
 on:
+  push:
+    branches: [ main, master, develop, stage, release ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master, develop, stage, release ]
+  workflow_dispatch:
                                                                                                                                                                                                                                           
 jobs:
   blackduck-pr-scan:
     runs-on: [mac-arm-sh]
                                                                                                                                                                                                                                           
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/nodejs-npm
+
     steps:
-    - uses: actions/checkout@v4
-                                                                                                                                                                                                                                          
-    - name: Use Node.js
-      uses: actions/setup-node@v3
+    - name: Checkout Source
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
-                                                                                                                                                                                                                                          
+        node-version: '18'  # Specify Node version
+   
     - name: Install dependencies
+      run: npm install  
+
+    - name: Build Project
       run: |
-        cd nodejs-npm
-        npm install
+        npm rebuild
                                                                                                                                                                                                                                           
-    - name: Black Duck PR Scan
+    - name: Black Duck Sca scan with PR Comments
       uses: blackduck-inc/black-duck-security-scan@v2
       with:
         blackducksca_url: ${{ secrets.BLACKDUCK_URL }}
